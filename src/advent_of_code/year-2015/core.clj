@@ -94,4 +94,42 @@
        (conj visited pos)
        (rest data))
       (conj visited pos))))
+  )
+
+(comment
+  "Day 3 Part 2"
+
+  (defn right [pos]
+    (update pos :x inc))
+
+  (defn left [pos]
+    (update pos :x dec))
+
+  (defn up [pos]
+    (update pos :y inc))
+
+  (defn down [pos]
+    (update pos :y dec))
+
+  (count
+   (loop [pos {:santa {:x 0 :y 0} 
+               :robot {:x 0 :y 0}}
+          turns (cycle [:santa :robot])
+          visited #{}
+          data (slurp (io/resource "2015/day3.txt"))]
+     (if (seq data)
+       (recur
+        (update pos (first turns)
+                (condp = (first data)
+                  \> right
+                  \< left
+                  \v down
+                  \^ up))
+        (rest turns)
+        (conj visited (:santa pos) (:robot pos))
+        (rest data))
+       visited
+       )))
+
+
 )
