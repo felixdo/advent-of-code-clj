@@ -62,4 +62,36 @@
       ))
   (with-open [rdr (clojure.java.io/reader (io/resource "2015/day2.txt"))]
     (reduce + (map order-ribbon (line-seq rdr))))
+  )
+
+
+(comment
+  "Day 3 Part 1"
+
+  (defn right [pos]
+    (update pos :x inc))
+
+  (defn left [pos]
+    (update pos :x dec))
+
+  (defn up [pos]
+    (update pos :y inc))
+
+  (defn down [pos]
+    (update pos :y dec))
+
+  (count (loop [pos {:x 0 :y 0}
+         visited #{pos}
+         data (slurp (io/resource "2015/day3.txt"))]
+    (if (seq data)
+      (recur
+       ((condp = (first data)
+          \> right
+          \< left
+          \v down
+          \^ up)
+        pos)
+       (conj visited pos)
+       (rest data))
+      (conj visited pos))))
 )
